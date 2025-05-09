@@ -1,8 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtMultimedia
-import Qt.labs.platform 1.1
-import Qt.labs.settings 1.0
 
 ApplicationWindow {
     visible: true
@@ -11,173 +8,131 @@ ApplicationWindow {
     title: "Multimedia Player"
     color: "#0B1022"
 
-    // Đảm bảo Settings được khởi tạo đúng cách
+    property int currentTrack: 1
 
+    // Số bài ở góc trên trái
+    Text {
+        text: "Số bài: " + serialHandler.songList.length
+        color: "yellow"
+        font.pixelSize: 18
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        anchors.topMargin: 20
+    }
+
+    // Nút lấy danh sách nhạc ở góc trên phải
     Button {
-            text: "Lấy danh sách nhạc"
-            anchors.top: parent.top
-            anchors.right: parent.right
-            onClicked: serialHandler.sendCommand("list\n")
-        }
-
-        // Hiển thị danh sách nhạc
-        Rectangle {
-            width: 350
-            height: 200
-            color: "#222"
-            radius: 10
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: 40
-
-            ListView {
-                anchors.fill: parent
-                model: serialHandler.songList
-                delegate: Text {
-                    text: modelData
-                    color: "white"
-                    font.pixelSize: 18
-                    padding: 8
-                }
-            }
-        }
-
-
-    Text {
-            text: serialHandler.currentSong
-            anchors.centerIn: parent
-        }
-
-        // Xử lý khi gặp lỗi mật khẩu WiFi
-    Connections {
-        target: serialHandler
-        function onWifiPasswordError() {
-            console.log("⚠️ Mật khẩu WiFi sai!");
-        }
+        text: "Lấy danh sách nhạc"
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 20
+        anchors.rightMargin: 20
+        z: 2
+        onClicked: serialHandler.sendCommand("list")
     }
 
-    MediaPlayer {
-        id: player
-        videoOutput: videoOutput
-        audioOutput: AudioOutput {}
-    }
+    // Danh sách nhạc ở giữa
+    Rectangle {
+        width: 400
+        height: 320
+        color: "#222"
+        radius: 10
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 70
 
-    VideoOutput {
-        id: videoOutput
-        anchors.fill: parent
-        anchors.margins: 40
-        fillMode: VideoOutput.PreserveAspectFit
-    }
-
-    FileDialog {
-        id: fileDialog
-        title: "Chọn media file"
-        onAccepted: {
-            player.source = fileDialog.file
-            player.play()
-
-            // Lưu tệp đã chọn vào danh sách gần đây
-            if (!settings.recentFiles.includes(fileDialog.file)) {
-                settings.recentFiles.unshift(fileDialog.file);  // Thêm vào đầu danh sách
-                if (settings.recentFiles.length > 5) {
-                    settings.recentFiles.pop();  // Giới hạn danh sách 5 tệp gần đây
-                }
-            }
-            // Lưu lại danh sách vào Settings
-            settings.recentFiles = settings.recentFiles;
-        }
-    }
-
-    Text {
-        anchors.centerIn: parent
-        text: "Click <a href=\"#\" style=\"color:#00ff88\">here</a> to open media file."
-        color: "white"
-        font.pixelSize: 20
-        textFormat: Text.RichText
-        MouseArea {
+        ListView {
             anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            onClicked: fileDialog.open()
+            anchors.margins: 10
+            model: serialHandler.songList
+            delegate: Item {
+                width: parent.width
+                height: 40
+                Rectangle {
+                    anchors.fill: parent
+                    color: ListView.isCurrentItem ? "#444" : "transparent"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            currentTrack = index + 1
+                            serialHandler.sendCommand("play:" + currentTrack)
+                        }
+                    }
+                    Text {
+                        anchors.centerIn: parent
+                        text: modelData
+                        color: "white"
+                        font.pixelSize: 18
+                    }
+                }
+            }
         }
     }
 
-    // Thanh điều khiển dưới cùng
+    // Thanh điều khiển ở dưới cùng
     Rectangle {
         height: 80
         width: parent.width
         color: "#111c33"
-        anchors.bottom: parent.bottom
         radius: 10
+        anchors.bottom: parent.bottom
 
         Row {
             anchors.centerIn: parent
             spacing: 30
 
+            // Tua lùi
             Button {
                 text: "⏪"
                 font.pixelSize: 24
                 width: 60; height: 60
                 onClicked: {
-                    // Tua ngược lại 10 giây
-                    if (player.position - 10000 >= 0) {
-                        player.position -= 10000;
-                    } else {
-                        player.position = 0;  // Đảm bảo không vượt qua vị trí 0
-                    }
+                    serialHandler.sendCommand("prev")
+                    if (currentTrack > 1) currentTrack--
                 }
             }
 
+            // Play bài đang chọn
             Button {
-                text: player.playbackState === MediaPlayer.PlayingState ? "⏸" : "▶"
+                text: "▶"
                 font.pixelSize: 24
                 width: 60; height: 60
-                onClicked: player.playbackState === MediaPlayer.PlayingState ? player.pause() : player.play()
+                onClicked: serialHandler.sendCommand("play:" + currentTrack)
             }
 
+            // Pause
+            Button {
+                text: "⏸"
+                font.pixelSize: 24
+                width: 60; height: 60
+                onClicked: serialHandler.sendCommand("pause")
+            }
+
+            // Tua tới
             Button {
                 text: "⏩"
                 font.pixelSize: 24
                 width: 60; height: 60
                 onClicked: {
-                    // Tua tới 10 giây
-                    if (player.position + 10000 <= player.duration) {
-                        player.position += 10000;
-                    } else {
-                        player.position = player.duration;  // Đảm bảo không vượt quá tổng thời gian
-                    }
+                    serialHandler.sendCommand("next")
+                    if (currentTrack < serialHandler.songList.length) currentTrack++
                 }
             }
 
-            Button {
-                text: "🔁"
-                font.pixelSize: 24
-                width: 60; height: 60
-                onClicked: player.playbackRate = 1.0
+            // Điều chỉnh âm lượng
+            Slider {
+                id: volumeSlider
+                width: 200
+                height: 20
+                from: 0; to: 30
+                value: 20
+                anchors.verticalCenter: parent.verticalCenter
+                onValueChanged: serialHandler.sendCommand("volume:" + Math.round(value))
             }
         }
-
-        Slider {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: 20
-            value: player.position / player.duration
-            onMoved: player.seek(value * player.duration)
-        }
-
-        Slider {
-            id: volumeSlider
-            width: 100
-            height: 20
-            anchors.right: parent.right
-            anchors.rightMargin: 20
-            anchors.verticalCenter: parent.verticalCenter
-            value: player.audioOutput.volume
-            onValueChanged: player.audioOutput.volume = value
-        }
     }
-
     onClosing: {
-        player.stop();  // Dừng phát video hoặc âm thanh khi cửa sổ bị đóng
-    }
+            serialHandler.sendCommand("pause")
+        }
 }

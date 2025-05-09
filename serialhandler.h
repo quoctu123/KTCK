@@ -1,34 +1,29 @@
+#ifndef SERIALHANDLER_H
+#define SERIALHANDLER_H
+
 #include <QObject>
-#include <QSerialPort>
-#include <QSerialPortInfo>
+#include <QTcpSocket>
+#include <QStringList>
 
 class SerialHandler : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString currentSong READ currentSong NOTIFY currentSongChanged)
-    Q_PROPERTY(bool wifiConnected READ wifiConnected NOTIFY wifiConnectedChanged)
-
+    Q_PROPERTY(QStringList songList READ songList NOTIFY songListChanged)
 public:
     explicit SerialHandler(QObject *parent = nullptr);
-
-    QString currentSong() const { return m_currentSong; }
-    bool wifiConnected() const { return m_wifiConnected; }
-
-    Q_INVOKABLE void sendCommand(const QString &cmd);
+    QStringList songList() const { return m_songList; }
+    Q_INVOKABLE void sendCommand(const QString &command);
 
 signals:
-    void currentSongChanged();
-    void wifiConnectedChanged();
-    void wifiPasswordError();  // Thêm tín hiệu cho lỗi mật khẩu WiFi
+    void songListChanged();
 
 private slots:
-    void readSerial();
+    void onReadyRead();
 
 private:
-    void parseLine(const QString &line);
-
-    QSerialPort serial;
-    QString m_currentSong;
-    bool m_wifiConnected = false;  // Thêm biến trạng thái WiFi
-    QByteArray buffer;
+    QTcpSocket *m_socket;
+    QStringList m_songList;
+    bool m_receivingSongList = false;
 };
+
+#endif // SERIALHANDLER_H

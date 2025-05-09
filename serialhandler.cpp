@@ -1,58 +1,48 @@
-#include "serialhandler.h"
+#include "SerialHandler.h"
 #include <QDebug>
 
 SerialHandler::SerialHandler(QObject *parent)
-    : QObject(parent)
+    : QObject(parent), m_socket(new QTcpSocket(this))
 {
-    serial.setPortName("COM3");    // Chỉnh cho đúng cổng ESP32
-    serial.setBaudRate(QSerialPort::Baud115200);
-    serial.setDataBits(QSerialPort::Data8);
-    serial.setParity(QSerialPort::NoParity);
-    serial.setStopBits(QSerialPort::OneStop);
-    serial.setFlowControl(QSerialPort::NoFlowControl);
+    connect(m_socket, &QTcpSocket::readyRead, this, &SerialHandler::onReadyRead);
 
-    if (serial.open(QIODevice::ReadWrite)) {
-        connect(&serial, &QSerialPort::readyRead, this, &SerialHandler::readSerial);
-        qDebug() << "Serial connected!";
+    QString esp32Ip = "192.168.1.20"; // Đổi thành IP thực tế của ESP32
+    quint16 esp32Port = 5000;
+
+    m_socket->connectToHost(esp32Ip, esp32Port);
+    if (!m_socket->waitForConnected(3000)) {
+        qDebug() << "Failed to connect to ESP32 at" << esp32Ip << ":" << esp32Port;
     } else {
-        qDebug() << "Serial open failed!";
+        qDebug() << "Connected to ESP32 at" << esp32Ip << ":" << esp32Port;
     }
 }
 
-void SerialHandler::sendCommand(const QString &cmd) {
-    QString fullCmd = cmd + "\n";  // Gửi lệnh có xuống dòng
-    serial.write(fullCmd.toUtf8());
-}
-
-void SerialHandler::readSerial() {
-    buffer += serial.readAll();
-
-    while (buffer.contains('\n')) {
-        int index = buffer.indexOf('\n');
-        QString line = buffer.left(index).trimmed();
-        buffer = buffer.mid(index + 1);
-
-        parseLine(line);
+void SerialHandler::sendCommand(const QString &command)
+{
+    if (m_socket->state() == QAbstractSocket::ConnectedState) {
+        QByteArray data = command.toUtf8();
+        if (!data.endsWith('\n')) data.append('\n');
+        m_socket->write(data);
+        m_socket->flush();
+        qDebug() << "Send command:" << command;
+    } else {
+        qDebug() << "Socket not connected, cannot send command:" << command;
     }
 }
 
-void SerialHandler::parseLine(const QString &line) {
-    qDebug() << "Received:" << line;
-
-    if (line.startsWith("WiFi:")) {
-        m_wifiConnected = line.contains("connected");
-        emit wifiConnectedChanged();
-    }
-    else if (line.contains("Failed to connect")) {
-        // Nếu mật khẩu WiFi sai
-        emit wifiPasswordError();  // Phát tín hiệu lỗi mật khẩu WiFi
-    }
-    else if (line.startsWith("Playing song:")) {
-        m_currentSong = line.mid(QString("Playing song:").length()).trimmed();
-        emit currentSongChanged();  // Cập nhật bài hát đang phát
-    }
-    else if (line.startsWith("Stopped song:")) {
-        m_currentSong.clear();
-        emit currentSongChanged();  // Xóa bài hát khi dừng
+void SerialHandler::onReadyRead()
+{
+    while (m_socket->canReadLine()) {
+        QString line = QString::fromUtf8(m_socket->readLine()).trimmed();
+        qDebug() << "TCP received:" << line;
+        if (line == "SONG_LIST_START") {
+            m_songList.clear();
+            m_receivingSongList = true;
+        } else if (line == "SONG_LIST_END") {
+            m_receivingSongList = false;
+            emit songListChanged();
+        } else if (m_receivingSongList) {
+            m_songList << line;
+        }
     }
 }
