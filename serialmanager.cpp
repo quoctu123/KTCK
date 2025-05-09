@@ -1,53 +1,27 @@
-#include "SerialManager.h"
-#include <QDebug>
+#ifndef SERIALMANAGER_H
+#define SERIALMANAGER_H
 
-SerialManager::SerialManager(QObject *parent) : QObject(parent), serial(new QSerialPort(this)) {}
+#include <QObject>
+#include <QSerialPort>
 
-void SerialManager::start()
+class SerialManager : public QObject
 {
-    serial->setPortName("/dev/ttyUSB0");  // Cổng của ESP32 trên Ubuntu
-    serial->setBaudRate(QSerialPort::Baud115200);
-    serial->setDataBits(QSerialPort::Data8);
-    serial->setParity(QSerialPort::NoParity);
-    serial->setStopBits(QSerialPort::OneStop);
-    serial->setFlowControl(QSerialPort::NoFlowControl);
+    Q_OBJECT
+public:
+    explicit SerialManager(QObject *parent = nullptr);
+    Q_INVOKABLE void start();
 
-    if (serial->open(QIODevice::ReadWrite)) {
-        qDebug() << "[C++] Đã kết nối thành công! Port:" << serial->portName();
-        qDebug() << "[C++] Cấu hình:"
-                 << serial->baudRate() << serial->dataBits()
-                 << serial->parity() << serial->stopBits();
+    Q_INVOKABLE void sendData(const QString &data);
 
-        connect(serial, &QSerialPort::readyRead, this, &SerialManager::onReadyRead);
-    } else {
-        qDebug() << "[C++] Không thể mở cổng serial:" << serial->errorString();
-    }
-}
+signals:
+    void signalChanged(const QString &data);  // Emit khi có dữ liệu mới
 
-void SerialManager::sendData(const QString &data)
-{
-    if (serial->isOpen()) {
-        QByteArray bytes = data.toUtf8();
-        bytes.append('\n');  // Kết thúc dòng
-        serial->write(bytes);
-        qDebug() << "[C++] Sent:" << bytes;
-    } else {
-        qDebug() << "[C++] Cổng serial chưa mở.";
-    }
-}
+private slots:
+    void onReadyRead();
 
-void SerialManager::onReadyRead()
-{
-    buffer += QString::fromUtf8(serial->readAll());
+private:
+    QSerialPort *serial;
+    QString buffer;
+};
 
-    int index;
-    while ((index = buffer.indexOf('\n')) != -1) {
-        QString line = buffer.left(index).trimmed();
-        buffer.remove(0, index + 1);
-
-        if (!line.isEmpty()) {
-            qDebug() << "[C++] Received:" << line;
-            emit signalChanged(line);
-        }
-    }
-}
+#endif // SERIALMANAGER_H

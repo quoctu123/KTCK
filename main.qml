@@ -19,11 +19,11 @@ Window {
 
     property alias font: font
 
-    FontLoader
-    {
+    FontLoader{
         id: font
         source: "qrc:/fontawesome.otf"
     }
+
     Shortcut{
         sequence:"Ctrl+E"
         onActivated: {
@@ -178,7 +178,6 @@ Window {
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
 
-
             RowLayout{
                 anchors.left: parent.left
                 anchors.leftMargin: 80
@@ -240,6 +239,7 @@ Window {
                 }
             }
         }
+
         IconButton{
             id:seatBreak
             roundIcon: true
@@ -254,6 +254,7 @@ Window {
                 verticalCenterOffset: 30
             }
         }
+
         IconButton{
             id:breakParking
             roundIcon: true
@@ -268,6 +269,7 @@ Window {
                 verticalCenterOffset: 30
             }
         }
+
         IconButton{
             id:lightDimmed
             roundIcon: true
@@ -282,6 +284,7 @@ Window {
                 verticalCenterOffset: 35
             }
         }
+
         IconButton{
             id:lightHigh
             roundIcon: true
@@ -308,19 +311,19 @@ Window {
 
                // CircularGaugeMeter phải được đặt bên trong một Item để có thể bố trí
                CircularGaugeMeter {
-                       id: gaugeleft
-                       anchors.centerIn: parent
-                       property bool accelerating
-                       width: parent.width * 0.85
-                       height: parent.height * 0.85
-                       value: accelerating ? maximumValue : 0
-                       maximumValue: 220
-                       shadowVisible: false
+                   id: gaugeleft
+                   anchors.centerIn: parent
+                   property bool accelerating
+                   width: parent.width * 0.85
+                   height: parent.height * 0.85
+                   value: accelerating ? maximumValue : 0
+                   maximumValue: 220
+                   shadowVisible: false
 
-                       Behavior on value {
-                           NumberAnimation { duration: 1000 }
-                       }
+                   Behavior on value {
+                       NumberAnimation { duration: 1000 }
                    }
+               }
 
                Rectangle {
                    id: needleft
@@ -376,6 +379,7 @@ Window {
             anchors.top: topBar.bottom
             anchors.horizontalCenter: topBar.horizontalCenter
             anchors.horizontalCenterOffset: 70
+
             Item{
                 Layout.fillWidth: true
             }
@@ -383,7 +387,6 @@ Window {
             Image {
                 source: "qrc:/icons/Road/mdi_turn-right-bold.svg"
                 sourceSize: Qt.size(70, 70)
-
                 // Điều chỉnh vị trí bằng anchors
                 anchors.top: parent.top
                 anchors.left: parent.left
@@ -391,6 +394,7 @@ Window {
 
             ColumnLayout{
                 Layout.alignment: Qt.AlignHCenter
+
                 Text{
                     font.pixelSize: 28
                     font.bold: true
@@ -399,6 +403,7 @@ Window {
                     color: "#FFFFFF"
                     text: qsTr("372 m")
                 }
+
                 Text{
                     font.pixelSize: 11
                     font.bold: true
@@ -408,10 +413,13 @@ Window {
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     text: qsTr("Enter St. Street and \ntake first right")
                 }
+
                 Item{
                     Layout.preferredHeight: 25
                 }
+
             }
+
             Item{
                 Layout.fillWidth: true
             }
@@ -533,19 +541,19 @@ Window {
             anchors.verticalCenter: parent.verticalCenter
             source: "qrc:/Speedometer.png"
             CircularGaugeMeter {
-                    id: gauge
-                    anchors.centerIn: parent
-                    property bool accelerating
-                    width: parent.width * 0.85
-                    height: parent.height * 0.85
-                    value: accelerating ? maximumValue : 0
-                    maximumValue: 220
-                    shadowVisible: false
+                id: gauge
+                anchors.centerIn: parent
+                property bool accelerating
+                width: parent.width * 0.85
+                height: parent.height * 0.85
+                value: accelerating ? maximumValue : 0
+                maximumValue: 220
+                shadowVisible: false
 
-                    Behavior on value {
-                        NumberAnimation { duration: 1000 }
-                    }
+                Behavior on value {
+                    NumberAnimation { duration: 1000 }
                 }
+            }
 
             Rectangle {
                 id: needle
@@ -566,17 +574,17 @@ Window {
             }
 
             Label {
-                   id: echoLabel1
-                   text: "🍃Echo"
-                   font.bold: true
-                   font.weight: Font.Normal
-                   font.pixelSize: 22
-                   font.family: "TacticSans-Med"
-                   color: "#2BD150"
-                   anchors.centerIn: parent
-                   anchors.horizontalCenterOffset: -10
-                   anchors.verticalCenterOffset: parent.height * 0.1
-               }
+               id: echoLabel1
+               text: "🍃Echo"
+               font.bold: true
+               font.weight: Font.Normal
+               font.pixelSize: 22
+               font.family: "TacticSans-Med"
+               color: "#2BD150"
+               anchors.centerIn: parent
+               anchors.horizontalCenterOffset: -10
+               anchors.verticalCenterOffset: parent.height * 0.1
+            }
 
                // Hiệu ứng DropShadow bằng MultiEffect
                MultiEffect {
@@ -598,86 +606,6 @@ Window {
             anchors.bottomMargin: 5
         }
 
-        Image{
-            id:left
-            source: "qrc:/icons/Vector 1.png"
-            anchors.left: leftgauge.left
-            anchors.bottom: leftgauge.bottom
-            anchors.leftMargin: 10
-            anchors.bottomMargin: 70
-            layer.enabled: true
-            layer.samplerName: "fuelShader"
-            layer.effect: ShaderEffect {
-                id: fuelShaderMask
-                property variant v
-                SequentialAnimation {
-                    running: true
-                    loops: Animation.Infinite
-
-                    UniformAnimator {
-                        target: fuelShaderMask
-                        uniform: "v"
-                        from: 0
-                        to: 1
-                        duration: 5000
-                    }
-                    UniformAnimator {
-                        target: fuelShaderMask
-                        uniform: "v"
-                        from: 1
-                        to: 0
-                        duration: 5000
-                    }
-                }
-
-            }
-        }
-
-
-        Image{
-            source: "qrc:/icons/desal.svg"
-            anchors.bottom: right.top
-            anchors.right: right.right
-            sourceSize: Qt.size(48,48)
-            anchors.bottomMargin: -1
-            anchors.rightMargin: 40
-        }
-        Image{
-            id:right
-            source:  "qrc:/icons/Vector 1.png"//"qrc:/icons/Vector 2.png"
-            mirror: true
-            anchors.left: rightgaugae.left
-            anchors.leftMargin: rightgaugae.width /2
-            anchors.bottom: rightgaugae.bottom
-            anchors.bottomMargin: 40
-            smooth: true
-            asynchronous: true
-            layer.enabled: true
-            layer.samplerName: "fuelShader"
-            layer.effect: ShaderEffect {
-                id: fuelShaderMask2
-                property variant v
-                SequentialAnimation {
-                    running: true
-                    loops: Animation.Infinite
-
-                    UniformAnimator {
-                        target: fuelShaderMask2
-                        uniform: "v"
-                        from: 0
-                        to: 1
-                        duration: 5000
-                    }
-                    UniformAnimator {
-                        target: fuelShaderMask2
-                        uniform: "v"
-                        from: 1
-                        to: 0
-                        duration: 5000
-                    }
-                }
-            }
-        }
 
         Image{
             sourceSize: Qt.size(topBar.width,topBar.height)
@@ -761,7 +689,6 @@ Window {
                 StackView {
                     id: stackView
                     anchors.fill: parent
-
                     initialItem: Item {
                         IconButton {
                             setIconSize: 32

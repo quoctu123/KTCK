@@ -47,13 +47,9 @@
         <file>icons/bottom.png</file>
         <file>icons/left.svg</file>
         <file>icons/right.svg</file>
-        <file>icons/Vector 1.svg</file>
-        <file>icons/Vector 2.svg</file>
-        <file>icons/Vector 2.png</file>
         <file>icons/desal.svg</file>
         <file>icons/feaul.svg</file>
         <file>fontawesome.otf</file>
-        <file>CarModelSports.qml</file>
         <file>CarLoader.qml</file>
         <file>sportscar_15k.qgltf</file>
         <file>sportscar_15k_1.bin</file>

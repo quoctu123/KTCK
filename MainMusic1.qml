@@ -44,7 +44,6 @@ ApplicationWindow {
                     settings.recentFiles.pop();  // Giới hạn danh sách 5 tệp gần đây
                 }
             }
-
             // Lưu lại danh sách vào Settings
             settings.recentFiles = settings.recentFiles;
         }
@@ -139,11 +138,27 @@ ApplicationWindow {
         }
     }
 
+    // Thêm nút để hiển thị danh sách tệp gần đây
+    Button {
+        text: "Show Recent Files"
+        width: 150
+        height: 40
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        anchors.bottomMargin:  100
+        onClicked: {
+            recentFilesListView.visible = !recentFilesListView.visible;  // Hiện/ẩn danh sách
+        }
+    }
+
     // ListView để hiển thị danh sách các tệp gần đây
     ListView {
+        id: recentFilesListView
         width: parent.width
         height: 150
         anchors.bottom: parent.top
+        visible: false  // Mặc định ẩn danh sách
         model: ListModel {
             // Tạo danh sách các tệp gần đây từ settings
             Component.onCompleted: {

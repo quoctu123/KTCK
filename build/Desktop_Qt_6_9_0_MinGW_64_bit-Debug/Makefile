@@ -255,6 +255,8 @@ Makefile: ../../Dashboard.pro D:/UngDung/QT/6.9.0/mingw_64/mkspecs/win32-g++/qma
 		D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_quickvectorimagegenerator_private.pri \
 		D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_quickwidgets.pri \
 		D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_quickwidgets_private.pri \
+		D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_serialport.pri \
+		D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_serialport_private.pri \
 		D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_shadertools.pri \
 		D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_shadertools_private.pri \
 		D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_spatialaudio.pri \
@@ -315,6 +317,7 @@ Makefile: ../../Dashboard.pro D:/UngDung/QT/6.9.0/mingw_64/mkspecs/win32-g++/qma
 		D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6QmlWorkerScript.prl \
 		D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6Qml.prl \
 		D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6Network.prl \
+		D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6SerialPort.prl \
 		D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6Core.prl \
 		D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6EntryPoint.prl \
 		D:/UngDung/QT/6.9.0/mingw_64/mkspecs/features/build_pass.prf \
@@ -505,6 +508,8 @@ D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_quickvectorimage_private.pri
 D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_quickvectorimagegenerator_private.pri:
 D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_quickwidgets.pri:
 D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_quickwidgets_private.pri:
+D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_serialport.pri:
+D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_serialport_private.pri:
 D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_shadertools.pri:
 D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_shadertools_private.pri:
 D:/UngDung/QT/6.9.0/mingw_64/mkspecs/modules/qt_lib_spatialaudio.pri:
@@ -565,6 +570,7 @@ D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6QmlModels.prl:
 D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6QmlWorkerScript.prl:
 D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6Qml.prl:
 D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6Network.prl:
+D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6SerialPort.prl:
 D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6Core.prl:
 D:/UngDung/QT/6.9.0/mingw_64/lib/Qt6EntryPoint.prl:
 D:/UngDung/QT/6.9.0/mingw_64/mkspecs/features/build_pass.prf:

@@ -2,7 +2,7 @@
 #define SERIALMANAGER_H
 
 #include <QObject>
-
+#include <QSerialPort>
 
 class SerialManager : public QObject
 {
