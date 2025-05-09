@@ -12,9 +12,48 @@ ApplicationWindow {
     color: "#0B1022"
 
     // Đảm bảo Settings được khởi tạo đúng cách
-    Settings {
-        id: settings
-        property var recentFiles: []  // Danh sách các tệp gần đây
+
+    Button {
+            text: "Lấy danh sách nhạc"
+            anchors.top: parent.top
+            anchors.right: parent.right
+            onClicked: serialHandler.sendCommand("list\n")
+        }
+
+        // Hiển thị danh sách nhạc
+        Rectangle {
+            width: 350
+            height: 200
+            color: "#222"
+            radius: 10
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 40
+
+            ListView {
+                anchors.fill: parent
+                model: serialHandler.songList
+                delegate: Text {
+                    text: modelData
+                    color: "white"
+                    font.pixelSize: 18
+                    padding: 8
+                }
+            }
+        }
+
+
+    Text {
+            text: serialHandler.currentSong
+            anchors.centerIn: parent
+        }
+
+        // Xử lý khi gặp lỗi mật khẩu WiFi
+    Connections {
+        target: serialHandler
+        function onWifiPasswordError() {
+            console.log("⚠️ Mật khẩu WiFi sai!");
+        }
     }
 
     MediaPlayer {
@@ -135,68 +174,6 @@ ApplicationWindow {
             anchors.verticalCenter: parent.verticalCenter
             value: player.audioOutput.volume
             onValueChanged: player.audioOutput.volume = value
-        }
-    }
-
-    // Thêm nút để hiển thị danh sách tệp gần đây
-    Button {
-        text: "Show Recent Files"
-        width: 150
-        height: 40
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.leftMargin: 20
-        anchors.bottomMargin:  100
-        onClicked: {
-            recentFilesListView.visible = !recentFilesListView.visible;  // Hiện/ẩn danh sách
-        }
-    }
-
-    // ListView để hiển thị danh sách các tệp gần đây
-    ListView {
-        id: recentFilesListView
-        width: parent.width
-        height: 150
-        anchors.bottom: parent.top
-        visible: false  // Mặc định ẩn danh sách
-        model: ListModel {
-            // Tạo danh sách các tệp gần đây từ settings
-            Component.onCompleted: {
-                // Lấy lại danh sách các tệp đã lưu trong settings
-                for (var i = 0; i < settings.recentFiles.length; ++i) {
-                    append({name: settings.recentFiles[i]})
-                }
-            }
-        }
-
-        delegate: Item {
-            width: parent.width
-            height: 40
-
-            Rectangle {
-                width: parent.width
-                height: 40
-                color: "#333"
-                border.color: "#555"
-                radius: 5
-
-                Text {
-                    anchors.centerIn: parent
-                    text: model.name
-                    color: "white"
-                    font.pixelSize: 18
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        // Khi nhấn vào tên tệp gần đây, phát lại
-                        player.source = model.name
-                        player.play()
-                    }
-                }
-            }
         }
     }
 
