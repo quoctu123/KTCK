@@ -60,5 +60,6 @@
         <file>tr.jpg</file>
         <file>shade.png</file>
         <file>MainMusic1.qml</file>
+        <file>MainTest.qml</file>
     </qresource>
 </RCC>

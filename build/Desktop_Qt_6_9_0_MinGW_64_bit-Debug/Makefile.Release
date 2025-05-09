@@ -116,6 +116,7 @@ release/qrc_qml.cpp: ../../qml.qrc \
 		../../CarLoader.qml \
 		../../Tacometer.png \
 		../../shade.png \
+		../../MainTest.qml \
 		../../fontawesome.otf \
 		../../SportCarFloorShadow.png \
 		../../CircularGaugeMeter.qml \
@@ -501,27 +502,11 @@ release/main.o: ../../main.cpp D:/UngDung/QT/6.9.0/mingw_64/include/QtGui/QGuiAp
 		D:/UngDung/QT/6.9.0/mingw_64/include/QtQml/qqmlabstracturlinterceptor.h \
 		D:/UngDung/QT/6.9.0/mingw_64/include/QtQml/QQmlContext \
 		D:/UngDung/QT/6.9.0/mingw_64/include/QtQml/qqmlcontext.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/QCommandLineParser \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/qcommandlineparser.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/qcommandlineoption.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/QDir \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/qdir.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/qdirlisting.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/qfiledevice.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/qiodevice.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/qfile.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/qfileinfo.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtMultimedia/QMediaFormat \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtMultimedia/qmediaformat.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtMultimedia/qtmultimediaglobal.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtMultimedia/qtmultimedia-config.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtMultimedia/qtmultimediaexports.h \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/QMimeType \
-		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/qmimetype.h \
 		../../serialhandler.h \
 		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/QObject \
 		D:/UngDung/QT/6.9.0/mingw_64/include/QtSerialPort/QSerialPort \
 		D:/UngDung/QT/6.9.0/mingw_64/include/QtSerialPort/qserialport.h \
+		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/qiodevice.h \
 		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/qproperty.h \
 		D:/UngDung/QT/6.9.0/mingw_64/include/QtCore/qpropertyprivate.h \
 		D:/UngDung/QT/6.9.0/mingw_64/include/QtSerialPort/qserialportglobal.h \

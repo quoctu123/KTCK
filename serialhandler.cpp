@@ -4,7 +4,7 @@
 SerialHandler::SerialHandler(QObject *parent)
     : QObject(parent)
 {
-    serial.setPortName("/dev/ttyUSB1");  // Chỉnh cho đúng cổng ESP32
+    serial.setPortName("COM3");    // Chỉnh cho đúng cổng ESP32
     serial.setBaudRate(QSerialPort::Baud115200);
     serial.setDataBits(QSerialPort::Data8);
     serial.setParity(QSerialPort::NoParity);

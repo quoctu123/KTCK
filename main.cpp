@@ -1,10 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QCommandLineParser>
-#include <QDir>
-#include <QMediaFormat>
-#include <QMimeType>
 #include <QSettings>
 #include "serialhandler.h"
 
@@ -19,25 +15,26 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("MyCompany");
     QCoreApplication::setApplicationVersion(QT_VERSION_STR);
 
-    // Sử dụng QSettings để lưu danh sách tệp gần đây
+    // Tạo đối tượng QSettings để lưu các thiết lập (nếu cần)
     QSettings settings("MyCompany", "MediaPlayer");
+
+    // Tạo đối tượng xử lý serial kết nối với ESP32
+    SerialHandler serialHandler;
 
     QQmlApplicationEngine engine;
 
-    // Truyền QSettings vào QML
+    // Truyền C++ object sang QML
     engine.rootContext()->setContextProperty("settings", &settings);
-
-    // Tạo đối tượng SerialHandler và đưa vào QML
-    SerialHandler serialHandler;
     engine.rootContext()->setContextProperty("serialHandler", &serialHandler);
 
-    // Load QML
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    // Load file QML chính
+    const QUrl url(QStringLiteral("qrc:/MainTest.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
                          if (!obj && url == objUrl)
                              QCoreApplication::exit(-1);
                      }, Qt::QueuedConnection);
+
     engine.load(url);
 
     return app.exec();
